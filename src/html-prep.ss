@@ -324,7 +324,10 @@
     (cond
       [(htmlmath (open-input-string s) #f) =>
        (lambda (html) (display html op))]
-      [else (punt-to-latex (format "$~a$" s) op)])))
+      [else (punt-to-latex (if (use-katex?)
+                               s
+                               (format "$~a$" s))
+                           op)])))
 
 (define htmlmath
   (lambda (ip compact?)
