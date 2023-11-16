@@ -144,7 +144,7 @@ katex:
 endif
 
 $(x).mathrun: gifs $(mathfiles)
-	@(cd $(mathdir); make)
+	@(cd $(mathdir); make KATEX=$(KATEX))
 	touch $(x).mathrun
 
 gifs:
@@ -172,7 +172,7 @@ $(x).hsecondrun: $(x).hfirstrun
 	touch $(x).hsecondrun
 
 $(x).hfirstrun: math $(x).thirdrun
-	(if [ ! -e $(mathdir) ] ; then mkdir -p -m u=rwx,g=srx,o=rx $(mathdir); ln -s ../Makefile ../mathmacros $(mathdir); fi)
+	(if [ ! -e $(mathdir) ] ; then mkdir -p -m u=rwx,g=srx,o=rx $(mathdir); ln -s ../Makefile ../mathmacros ../katexmacros $(mathdir); fi)
 	$(Hprep) --mathdir $(mathdir) $(if $(KATEX),--use-katex,) $(x)
 	touch $(x).hfirstrun
 
