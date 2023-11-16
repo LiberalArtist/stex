@@ -139,7 +139,7 @@ $(x).hfourthrun: $(x).mathrun
 katex:
 	mkdir -p katex
 	cp $(KATEX_CSS) katex/katex.css
-	(cd katex; (cd $(dir $(KATEX_CSS)); tar -cf --dereference - fonts) | tar -xpf -)
+	(cd katex; (cd $(dir $(KATEX_CSS)); tar -cf - --dereference fonts) | tar -xpf -)
 	chmod u+w katex/katex.css katex/fonts
 endif
 
@@ -148,11 +148,11 @@ $(x).mathrun: gifs $(mathfiles)
 	touch $(x).mathrun
 
 gifs:
-	(cd $(STEXLIB); tar -cf --dereference - gifs) | tar -xpf -
+	(cd $(STEXLIB); tar -cf - --dereference gifs) | tar -xpf -
 	chmod u+w gifs
 
 math:
-	(cd $(STEXLIB); tar -cf --dereference - math) | tar -xpf -
+	(cd $(STEXLIB); tar -cf - --dereference math) | tar -xpf -
 	chmod u+w math
 
 $(mathfiles): $(x).hthirdrun $(figps)
