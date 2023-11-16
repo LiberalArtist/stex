@@ -131,6 +131,7 @@
 (import (except (chezscheme) open-input-file) (dsm) (preplib) (script))
 
 (define math-directory (make-parameter "math"))
+(define use-katex? (make-parameter #f))
 
 (define push-ofile
   (lambda (op ofiles)
@@ -193,6 +194,8 @@
       (fprintf op "<!-- Edit the .tex version instead-->~%~%")
       (fprintf op "<html>~%")
       (fprintf op "<head>~%<title>~a</title>~%" title)
+      (when (use-katex?)
+        (fprintf op "<link href=\"katex/katex.css\" rel=\"stylesheet\" type=\"text/css\" />\n"))
       (when (header-stuff) (display (header-stuff) op))
       (when (style-sheet)
         (fprintf op "<link href=\"~a\" rel=\"stylesheet\" type=\"text/css\" />\n"
@@ -280,6 +283,8 @@
 
 (define seqnarray*
   (lambda (ip op) ; within \begin{eqnarray*} ... \end{eqnarray*}
+    (when (use-katex?)
+      (input-error "environment eqnarray* not supported by KaTeX"))
     (let ([s (let ([buf (open-output-string)])
                (let loop ()
                  (state-case (c (read-char ip))
@@ -439,12 +444,23 @@
          (fprintf op "<img src=\"~a\" alt=\"<graphic>\" />" (cdr a)))]
       [else
        (let* ([fn (math-file-name)]
-              [texfn (format "~a.tex" fn)]
-              [giffn (format "~a.gif" fn)])
-         (fprintf op "<img src=\"~a\" alt=\"<graphic>\">" giffn)
-         (latex-cache (cons (cons s (format "~a" giffn)) (latex-cache)))
-        ; don't rewrite file unless different to avoid need to remake gif file
-         (let ([s (format "~a~a~a" latex-header s latex-trailer)])
+              [texfn (format "~a.~a" fn (if (use-katex?) "katex" "tex"))]
+              [outfn (format "~a.~a" fn (if (use-katex?) "html" "gif"))])
+         (latex-cache (cons (cons s (format "~a" outfn)) (latex-cache)))
+         (cond
+          [(and (use-katex?)
+                (guard (c [else #f])
+                  (call-with-port (open-input-file outfn) get-string-all))) =>
+           (lambda (html)
+             (fprintf op "~a" html))]
+          [(use-katex?)
+           (fprintf op "<b>Placeholder for \"~a\".</b>" outfn)]
+          [else
+           (fprintf op "<img src=\"~a\" alt=\"<graphic>\" />" outfn)])
+        ; don't rewrite file unless different to avoid need to remake output file
+         (let ([s (if (use-katex?)
+                      s
+                      (format "~a~a~a" latex-header s latex-trailer))])
            (unless (guard (c [else #f])
                      (equal? s (call-with-port (open-input-file texfn) get-string-all)))
              (call-with-port (open-output-file texfn 'replace)
@@ -1932,7 +1948,8 @@
 (command-line-case (command-line)
   [((keyword --help)) (usage)]
   [((keyword --version)) (version)]
-  [((flags [--mathdir mathdir $ (math-directory mathdir)])
+  [((flags [--mathdir mathdir $ (math-directory mathdir)]
+           [--use-katex $ (use-katex? #t)])
     filename* ...)
    (for-each go
      (let ([found (find-filename "html-prep.tex")])
