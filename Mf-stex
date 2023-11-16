@@ -139,7 +139,7 @@ $(x).hfourthrun: $(x).mathrun
 katex:
 	mkdir -p katex
 	cp $(KATEX_CSS) katex/katex.css
-	(cd $(dir $(KATEX_CSS)); tar -cf - fonts) | (cd katex; tar -xpf -)
+	(cd katex; (cd $(dir $(KATEX_CSS)); tar -cf - fonts) | tar -xpf -)
 	chmod u+w katex/katex.css katex/fonts
 endif
 
