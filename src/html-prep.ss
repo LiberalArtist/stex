@@ -1968,8 +1968,8 @@
   [((keyword --version)) (version)]
   [((flags [--mathdir mathdir $ (math-directory mathdir)]
            [--use-katex $ (use-katex? #t)]
-           [--katex-finished $ (use-katex? #t)
-                               (katex-finished? #t)])
+           [--katex-finished $ (begin (use-katex? #t)
+                                      (katex-finished? #t))])
     filename* ...)
    (for-each go
      (let ([found (find-filename "html-prep.tex")])
