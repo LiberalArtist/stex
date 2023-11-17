@@ -1,6 +1,7 @@
 include mathfiles
 
 density=-r90x90
+runkatex=$(KATEX) $(KATEX_FLAGS) --macro-file katexmacros --trust
 
 .SUFFIXES:
 .SUFFIXES: .tex .gif .katex .html
@@ -20,10 +21,10 @@ density=-r90x90
 	test -f $*.gif && chmod 644 $*.gif
 
 .katex.html:
-	$(KATEX) -i $*.katex -o $*.html --macro-file katexmacros --trust
+	$(runkatex) -i $*.katex -o $*.html
 	test -f $*.html && chmod 644 $*.html
 
-ifeq ($(KATEX),)
+ifeq ($(strip $(KATEX)),)
 all: ${gifs}
 else
 all: ${htmls}

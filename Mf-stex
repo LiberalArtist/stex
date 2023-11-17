@@ -153,7 +153,7 @@ endif
 endif
 
 $(x).mathrun: gifs $(mathfiles)
-	@(cd $(mathdir); make KATEX=$(KATEX))
+	@(cd $(mathdir); make KATEX=$(KATEX) )
 	touch $(x).mathrun
 
 gifs:

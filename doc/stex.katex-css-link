@@ -12,11 +12,8 @@
     Under other circumstances, the default behavior of stex is preferrable: in
     particular, it ensures that the version of katex.css matches the version
     of KaTeX you used to typeset the document.
-
-    Another option might be to invoke katex with `--format mathml` and rely on
-    the nascent native support in recent browsers and operating systems.
 -->
 <link rel="stylesheet"
-href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.css"
-integrity="sha384-OH8qNTHoMMVNVcKdKewlipV4SErXqccxxlg6HC9Cwjr5oZu2AdBej1TndeCirael"
-crossorigin="anonymous" />
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.css"
+      integrity="sha384-OH8qNTHoMMVNVcKdKewlipV4SErXqccxxlg6HC9Cwjr5oZu2AdBej1TndeCirael"
+      crossorigin="anonymous" />
