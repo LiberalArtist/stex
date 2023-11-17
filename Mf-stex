@@ -132,7 +132,7 @@ else
 $(x).html: $(x).hfourthrun katex
 
 $(x).hfourthrun: $(x).mathrun
-	$(Hprep) --mathdir $(mathdir) $(if $(KATEX),--use-katex,) $(x)
+	$(Hprep) --mathdir $(mathdir) --use-katex --katex-finished $(x)
 	chmod 444 *.html
 	touch $(x).hfourthrun
 

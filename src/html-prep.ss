@@ -132,6 +132,7 @@
 
 (define math-directory (make-parameter "math"))
 (define use-katex? (make-parameter #f))
+(define katex-finished? (make-parameter #f))
 
 (define push-ofile
   (lambda (op ofiles)
@@ -441,33 +442,47 @@
 "
 \\end{document}
 ")
+    (define outfn
+      (cond
+       [(assoc s (latex-cache)) => cdr]
+       [else
+        (let* ([fn (math-file-name)]
+               [texfn (format "~a.~a" fn (if (use-katex?) "katex" "tex"))]
+               [outfn (format "~a.~a" fn (if (use-katex?) "html" "gif"))])
+          (latex-cache (cons (cons s (format "~a" outfn)) (latex-cache)))
+          (let ([s (if (use-katex?)
+                       s
+                       (format "~a~a~a" latex-header s latex-trailer))])
+            (unless (guard (c [else #f])
+                      (equal? s (call-with-port (open-input-file texfn) get-string-all)))
+              (call-with-port (open-output-file texfn 'replace)
+                (lambda (texop) (display s texop)))))
+          outfn)]))
     (cond
-      [(assoc s (latex-cache)) =>
-       (lambda (a)
-         (fprintf op "<img src=\"~a\" alt=\"<graphic>\" />" (cdr a)))]
-      [else
-       (let* ([fn (math-file-name)]
-              [texfn (format "~a.~a" fn (if (use-katex?) "katex" "tex"))]
-              [outfn (format "~a.~a" fn (if (use-katex?) "html" "gif"))])
-         (latex-cache (cons (cons s (format "~a" outfn)) (latex-cache)))
-         (cond
-          [(and (use-katex?)
-                (guard (c [else #f])
-                  (call-with-port (open-input-file outfn) get-string-all))) =>
-           (lambda (html)
-             (fprintf op "~a" html))]
-          [(use-katex?)
-           (fprintf op "<b>Placeholder for \"~a\".</b>" outfn)]
-          [else
-           (fprintf op "<img src=\"~a\" alt=\"<graphic>\" />" outfn)])
-        ; don't rewrite file unless different to avoid need to remake output file
-         (let ([s (if (use-katex?)
-                      s
-                      (format "~a~a~a" latex-header s latex-trailer))])
-           (unless (guard (c [else #f])
-                     (equal? s (call-with-port (open-input-file texfn) get-string-all)))
-             (call-with-port (open-output-file texfn 'replace)
-               (lambda (texop) (display s texop))))))])))
+     [(and (use-katex?)
+           (guard (c [(not (katex-finished?)) #f])
+             (call-with-port (open-input-file outfn) get-string-all))) =>
+      (lambda (raw-html)
+        (define trimmed-html
+          (let* ([pos (- (string-length html) 1)]
+                 [pos (and (nonnegative? pos)
+                           (eqv? #\newline (string-ref html pos))
+                           (or (and (positive? pos)
+                                    (eqv? #\return (string-ref html (- pos 1)))
+                                    (- pos 1))
+                               pos))])
+            (if pos
+                (substring raw-html 0 pos)
+                raw-html)))
+        (define (comment what)
+          (fprintf op "<!-- ~a of KaTeX output from \"~a\" -->" what outfn))
+        (comment "Beginning")
+        (display trimmed-html op)
+        (comment "End"))]
+     [(use-katex?)
+      (fprintf op "<b>Placeholder for KaTeX output from \"~a\".</b>" outfn)]
+     [else
+      (fprintf op "<img src=\"~a\" alt=\"<graphic>\" />" outfn)])))
 
 (define math-file-name
   (let ([seq -1])
@@ -1952,7 +1967,9 @@
   [((keyword --help)) (usage)]
   [((keyword --version)) (version)]
   [((flags [--mathdir mathdir $ (math-directory mathdir)]
-           [--use-katex $ (use-katex? #t)])
+           [--use-katex $ (use-katex? #t)]
+           [--katex-finished $ (use-katex? #t)
+                               (katex-finished? #t)])
     filename* ...)
    (for-each go
      (let ([found (find-filename "html-prep.tex")])
