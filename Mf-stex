@@ -50,6 +50,7 @@ ifneq ($(strip $(KATEX)),)
     endif
   endif
 endif
+export KATEX KATEX_FLAGS
 
 mathdir=math/$(x)
 mathfiles=$(mathdir)/mathfiles
