@@ -464,7 +464,7 @@
              (call-with-port (open-input-file outfn) get-string-all))) =>
       (lambda (raw-html)
         (define trimmed-html
-          (let* ([pos (- (string-length html) 1)]
+          (let* ([pos (- (string-length raw-html) 1)]
                  [pos (and (nonnegative? pos)
                            (eqv? #\newline (string-ref html pos))
                            (or (and (positive? pos)
