@@ -432,17 +432,21 @@
           [(eof) (get-output-string buf)]
           [else (input-error "unexpected character ~s in math mode" c)])))))
 
-(define (trim-trailing-newline s)
-  (let* ([pos (- (string-length s) 1)]
-         [pos (and (nonnegative? pos)
-                   (eqv? #\newline (string-ref s pos))
-                   (or (and (positive? pos)
-                            (eqv? #\return (string-ref s (- pos 1)))
-                            (- pos 1))
-                       pos))])
-    (if pos
-        (substring s 0 pos)
-        s)))
+(define (file->string-sans-newline fn)
+  (define s
+    (call-with-port (open-input-file fn) get-string-all))
+  (if (eof-object? s)
+      ""
+      (let* ([pos (- (string-length s) 1)]
+             [pos (and (nonnegative? pos)
+                       (eqv? #\newline (string-ref s pos))
+                       (or (and (positive? pos)
+                                (eqv? #\return (string-ref s (- pos 1)))
+                                (- pos 1))
+                           pos))])
+        (if pos
+            (substring s 0 pos)
+            s))))
 
 (define punt-to-latex
   (lambda (s op)
@@ -476,12 +480,12 @@
     (cond
      [(and (use-katex?)
            (guard (c [(not (katex-finished?)) #f])
-             (call-with-port (open-input-file outfn) get-string-all))) =>
+             (file->string-sans-newline outfn))) =>
       (lambda (html)
         (define (comment what)
           (fprintf op "<!-- ~a of KaTeX output from \"~a\" -->" what outfn))
         (comment "Beginning")
-        (display (trim-trailing-newline html) op)
+        (display html op)
         (comment "End"))]
      [(use-katex?)
       (fprintf op "<b>Placeholder for KaTeX output from \"~a\".</b>" outfn)]
@@ -1985,9 +1989,7 @@
   [((flags [--mathdir mathdir $ (math-directory mathdir)]
            [--use-katex $ (use-katex? #t)]
            [--katex-css-link-file
-            linkfile $ (let ([html (trim-trailing-newline
-                                    (call-with-port (open-input-file linkfile)
-                                      get-string-all))])
+            linkfile $ (let ([html (file->string-sans-newline linkfile)])
                          (use-katex? #t)
                          (unless (equal? "" html)
                            (katex-css-link html)))]
