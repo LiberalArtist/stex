@@ -633,8 +633,9 @@ available:
 Using \KaTeX\ makes the rendered math accessible to assistive technologies,
 CSS, and other browser features. It also tends to look better than math in
 GIFs.  However, a few features that stex supports when rendering to GIFs,
-notably including the \scheme{eqnarray*} environment, are not currently
-supported when rendering with \KaTeX.
+notably including \scheme{\epsfbox\schlbrace\schrbrace} and the
+\scheme{eqnarray*} environment, are not currently supported when rendering with
+\KaTeX.
 
 By default, stex will use \KaTeX\ if the ``katex'' command is found; otherwise,
 it will automatically fall back to generating GIFs. To prevent stex from using

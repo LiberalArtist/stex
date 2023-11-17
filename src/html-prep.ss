@@ -321,6 +321,7 @@
                          (loop)]))]
                    [(eof) (unexpected-eof "within \\[ ... \\]")]
                    [else (write-char c buf) (loop)])))])
+      ;; could add support for display mode when rendering with KaTeX
       (emit-math s op))))
 
 (define emit-math
@@ -1730,9 +1731,13 @@
 
 (global-def epsfbox
   (P lambda ()
-    (fprintf op "<p>~%")
-    (punt-to-latex (format "\\input{epsf.sty}\\epsfbox{~a}" (read-bracketed-text ip)) op)
-    (fprintf op "<p>~%")
+     (let ([file (read-bracketed-text ip)])
+       (when (use-katex?)
+         (input-error "macro \\epsfbox{~a} not supported by KaTeX" file))
+       ;; might be better to render to SVG ...
+       (fprintf op "<p>~%")
+       (punt-to-latex (format "\\input{epsf.sty}\\epsfbox{~a}" file) op)
+       (fprintf op "<p>~%"))
     (P s0)))
 
 (global-def bibitem
