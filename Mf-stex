@@ -34,8 +34,9 @@ endif
 ifneq ($(strip $(KATEX)),)
   ifeq ($(strip $(KATEX_CSS)),)
     # try to infer KATEX_CSS
-    katexrealdir:=$(dir $(realpath $(shell command -v $(KATEX))))
-    ifeq ($(realpath $(KATEX)),)
+    katexrealpath:=$(realpath $(shell command -v $(KATEX)))
+    katexrealdir:=$(dir $(katexrealpath))
+    ifeq ($(katexrealpath),)
       # can't infer; complain below
     else ifneq ($(realpath $(katexrealdir)/dist/katex.css),)
       # NPM installation layout (also release tarballs)
