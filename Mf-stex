@@ -31,8 +31,8 @@ endif
 ifeq ($(origin KATEX), undefined)
 KATEX:=$(if $(shell command -v katex),katex,)
 endif
-ifneq ($(KATEX),)
-  ifeq ($(KATEX_CSS),)
+ifneq ($(strip $(KATEX)),)
+  ifeq ($(strip $(KATEX_CSS)),)
     # try to infer KATEX_CSS
     katexrealdir:=$(dir $(realpath $(shell command -v $(KATEX))))
     ifeq ($(realpath $(KATEX)),)
@@ -44,7 +44,7 @@ ifneq ($(KATEX),)
       # Debian installation layout
       KATEX_CSS=$(katexrealdir)/katex.css
     endif
-    ifeq ($(KATEX_CSS),)
+    ifeq ($(strip $(KATEX_CSS)),)
       $(error cannot find KATEX_CSS for KATEX=$(KATEX))
     endif
   endif
@@ -126,21 +126,29 @@ $(x).firstrun: $(texsrc)
 
 all.tex: $(texsrc)
 
-ifeq ($(KATEX),)
+ifeq ($(strip $(KATEX)),)
 $(x).html: $(x).mathrun
 else
-$(x).html: $(x).hfourthrun katex
-
-$(x).hfourthrun: $(x).mathrun
-	$(Hprep) --mathdir $(mathdir) --use-katex --katex-finished $(x)
+$(x).hfourthrun: $(x).mathrun $(x).katex-css-link
+	$(Hprep) --mathdir $(mathdir) --use-katex --katex-finished --katex-css-link-file $(x).katex-css-link $(x)
 	chmod 444 *.html
 	touch $(x).hfourthrun
+
+# a project may supply one with content to override the default
+$(x).katex-css-link:
+	touch $(x).katex-css-link
+
+ifeq ($(strip $(KATEX_CSS)),no)
+$(x).html: $(x).hfourthrun
+else
+$(x).html: $(x).hfourthrun katex
 
 katex:
 	mkdir -p katex
 	cp $(KATEX_CSS) katex/katex.css
 	(cd katex; (cd $(dir $(KATEX_CSS)); tar -cf - --dereference fonts) | tar -xpf -)
 	chmod u+w katex/katex.css katex/fonts
+endif
 endif
 
 $(x).mathrun: gifs $(mathfiles)
@@ -162,18 +170,18 @@ $(mathfiles): $(x).hthirdrun $(figps)
 	(cd $(mathdir); echo *.katex | sed -e "s/\.katex/.html/g") >> $(mathfiles)
 
 $(x).hthirdrun: $(x).hsecondrun
-	$(Hprep) --mathdir $(mathdir) $(if $(KATEX),--use-katex,) $(x)
+	$(Hprep) --mathdir $(mathdir) $(if $(strip $(KATEX)),--use-katex,) $(x)
 	chmod 444 *.html
 	touch $(x).hthirdrun
 
 $(x).hsecondrun: $(x).hfirstrun
-	$(Hprep) --mathdir $(mathdir) $(if $(KATEX),--use-katex,) $(x)
+	$(Hprep) --mathdir $(mathdir) $(if $(strip $(KATEX)),--use-katex,) $(x)
 	chmod 444 *.html
 	touch $(x).hsecondrun
 
 $(x).hfirstrun: math $(x).thirdrun
 	(if [ ! -e $(mathdir) ] ; then mkdir -p -m u=rwx,g=srx,o=rx $(mathdir); ln -s ../Makefile ../mathmacros ../katexmacros $(mathdir); fi)
-	$(Hprep) --mathdir $(mathdir) $(if $(KATEX),--use-katex,) $(x)
+	$(Hprep) --mathdir $(mathdir) $(if $(strip $(KATEX)),--use-katex,) $(x)
 	touch $(x).hfirstrun
 
 spell: $(spellobj)

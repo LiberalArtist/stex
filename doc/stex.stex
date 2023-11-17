@@ -628,8 +628,8 @@ strategies available:
 
 \begin{enumerate}
   \item Originally, stex used \LaTeX\ to render math to GIF images.
-  \item Optionally, stex can use \href{https://katex.org}{\KaTeX}, which
-    generates MathML and/or HTML.
+  \item Optionally, stex can use \KaTeX,
+    which generates MathML and/or HTML.
 \end{enumerate}
 
 Using \KaTeX\ makes the rendered math accessible to assistive technologies,
@@ -643,7 +643,7 @@ it will automatically fall back to generating GIFs. To prevent stex from using
 \KaTeX\ even if it is available, use \scheme{make KATEX=} or define
 \scheme{KATEX} as empty in your makefile before including Mf-stex. The same
 mechanisms can be used to supply a non-default ``katex'' command or even to
-require that \KaTeX be present, e.g.~ by writing:
+require that \KaTeX\ be present, e.g.\ by writing:
 
 \begin{quotation}
 \begin{verbatim}
@@ -652,12 +652,22 @@ KATEX:=$(if $(shell command -v katex),katex,$(error katex not found))
 \end{quotation}
 
 The output of \KaTeX\ requires supporting CSS and font files. (Notably, it does
-not require JavaScript.) By default, stex will attempt to find these relative
-to the ``katex'' command, and it should be able to handle the installation
-layouts used by both Node.js and Debian. If they cannot be found automatically,
-you will need to define \scheme{KATEX_CSS}, either at the command line or in
-your makefile (before including Mf-stex): likely values include
-``./node\_modules/katex/dist/katex.css'' and
+not require JavaScript.) By default, stex will attempt to find these files
+relative to the ``katex'' command, and it should be able to handle the
+installation layouts used by both Node.js and Debian. If they cannot be found
+automatically, you will need to define \scheme{KATEX_CSS}, either at the
+command line or in your makefile (before including Mf-stex): likely values
+include ``./node\_modules/katex/dist/katex.css'' and
 ``/usr/share/javascript/katex/katex.css''.
+
+By default, stex copies the needed CSS and font files into a directory named
+``katex'' alongside the generated HTML files: when using \KaTeX, you need to
+install this directory or upload it to your server.
+
+As a special case, defining \scheme{KATEX_CSS=no} instructs stex not to copy
+these files. If you use this option, you may also want to override the default
+HTML \scheme{link} element used to load the CSS by creating a non-empty file
+with the base name of your document and the extension ``.katex-css-link'': for
+an example, see the ``stex.katex-css-link'' file used for this document.
 
 \end{document}

@@ -31,7 +31,7 @@
 \def\schunderscore{\raw{_}}
 \def\becomes{$\rightarrow$}
 \def\is{$\Rightarrow$}
-\def\si{\raw{<img src="gifs/ghostRightarrow.gif">}} % FIXME re KaTeX
+\def\si{\schemeghostRightarrow} % handled specially by html-prep
 \def\var#1{\emph{#1}}
 
 % frame="border" rules="all" makes mozilla do it right

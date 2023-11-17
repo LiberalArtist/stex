@@ -65,6 +65,7 @@
 ;;;   \emph{...}
 ;;;   \epsfbox{...}
 ;;;   \genlab
+;;;   \schemeghostRightarrow
 ;;;   \hindex{label}{stuff}                   (see below)
 ;;;   \include{filename}
 ;;;   \input{filename}
@@ -133,6 +134,8 @@
 (define math-directory (make-parameter "math"))
 (define use-katex? (make-parameter #f))
 (define katex-finished? (make-parameter #f))
+(define katex-css-link
+  (make-parameter "<link href=\"katex/katex.css\" rel=\"stylesheet\" type=\"text/css\" />"))
 
 (define push-ofile
   (lambda (op ofiles)
@@ -196,7 +199,7 @@
       (fprintf op "<html>~%")
       (fprintf op "<head>~%<title>~a</title>~%" title)
       (when (use-katex?)
-        (fprintf op "<link href=\"katex/katex.css\" rel=\"stylesheet\" type=\"text/css\" />\n"))
+        (fprintf op "~a~%" (katex-css-link)))
       (when (header-stuff) (display (header-stuff) op))
       (when (style-sheet)
         (fprintf op "<link href=\"~a\" rel=\"stylesheet\" type=\"text/css\" />\n"
@@ -429,6 +432,18 @@
           [(eof) (get-output-string buf)]
           [else (input-error "unexpected character ~s in math mode" c)])))))
 
+(define (trim-trailing-newline s)
+  (let* ([pos (- (string-length s) 1)]
+         [pos (and (nonnegative? pos)
+                   (eqv? #\newline (string-ref s pos))
+                   (or (and (positive? pos)
+                            (eqv? #\return (string-ref s (- pos 1)))
+                            (- pos 1))
+                       pos))])
+    (if pos
+        (substring s 0 pos)
+        s)))
+
 (define punt-to-latex
   (lambda (s op)
     (define latex-header
@@ -462,22 +477,11 @@
      [(and (use-katex?)
            (guard (c [(not (katex-finished?)) #f])
              (call-with-port (open-input-file outfn) get-string-all))) =>
-      (lambda (raw-html)
-        (define trimmed-html
-          (let* ([pos (- (string-length raw-html) 1)]
-                 [pos (and (nonnegative? pos)
-                           (eqv? #\newline (string-ref raw-html pos))
-                           (or (and (positive? pos)
-                                    (eqv? #\return (string-ref raw-html (- pos 1)))
-                                    (- pos 1))
-                               pos))])
-            (if pos
-                (substring raw-html 0 pos)
-                raw-html)))
+      (lambda (html)
         (define (comment what)
           (fprintf op "<!-- ~a of KaTeX output from \"~a\" -->" what outfn))
         (comment "Beginning")
-        (display trimmed-html op)
+        (display (trim-trailing-newline html) op)
         (comment "End"))]
      [(use-katex?)
       (fprintf op "<b>Placeholder for KaTeX output from \"~a\".</b>" outfn)]
@@ -1773,6 +1777,18 @@
     (display (genlab) op)
     (P s0)))
 
+(global-def schemeghostRightarrow
+  (P lambda ()
+     (cond
+      [(use-katex?)
+       (display "<span style=\"visibility: hidden\">" op)
+       (emit-math "\\Rightarrow" op)
+       (display "</span>" op)]
+      [else
+       ;; uses a special build process without KaTeX
+       (display "<img src=\"gifs/ghostRightarrow.gif\" />" op)])
+    (P s0)))
+
 (global-def hindex
   (P lambda ()
     (P process-string () (read-bracketed-text ip)
@@ -1968,6 +1984,13 @@
   [((keyword --version)) (version)]
   [((flags [--mathdir mathdir $ (math-directory mathdir)]
            [--use-katex $ (use-katex? #t)]
+           [--katex-css-link-file
+            linkfile $ (let ([html (trim-trailing-newline
+                                    (call-with-port (open-input-file linkfile)
+                                      get-string-all))])
+                         (use-katex? #t)
+                         (unless (equal? "" html)
+                           (katex-css-link html)))]
            [--katex-finished $ (begin (use-katex? #t)
                                       (katex-finished? #t))])
     filename* ...)
