@@ -20,7 +20,7 @@ density=-r90x90
 	test -f $*.gif && chmod 644 $*.gif
 
 .katex.html:
-	$(KATEX) -i $*.katex -o $*.html --macro-file katexmacros
+	$(KATEX) -i $*.katex -o $*.html --macro-file katexmacros --trust
 	test -f $*.html && chmod 644 $*.html
 
 ifeq ($(KATEX),)

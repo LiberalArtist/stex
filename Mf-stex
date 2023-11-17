@@ -29,12 +29,12 @@ else
 endif
 
 ifeq ($(origin KATEX), undefined)
-KATEX:=$(shell command -v katex)
+KATEX:=$(if $(shell command -v katex),katex,)
 endif
 ifneq ($(KATEX),)
   ifeq ($(KATEX_CSS),)
     # try to infer KATEX_CSS
-    katexrealdir=$(dir $(realpath $(KATEX)))
+    katexrealdir:=$(dir $(realpath $(shell command -v $(KATEX))))
     ifeq ($(realpath $(KATEX)),)
       # can't infer; complain below
     else ifneq ($(realpath $(katexrealdir)/dist/katex.css),)
