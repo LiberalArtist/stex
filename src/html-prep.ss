@@ -309,6 +309,8 @@
 
 (define smathdisplay
   (lambda (ip op) ; within \[ ... \]
+    (when (use-katex?)
+      (input-error "found smathdisplay with KaTeX"))
     (let ([s (let ([buf (open-output-string)])
                (let loop ()
                  (state-case (c (read-char ip))
