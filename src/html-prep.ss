@@ -466,9 +466,9 @@
         (define trimmed-html
           (let* ([pos (- (string-length raw-html) 1)]
                  [pos (and (nonnegative? pos)
-                           (eqv? #\newline (string-ref html pos))
+                           (eqv? #\newline (string-ref raw-html pos))
                            (or (and (positive? pos)
-                                    (eqv? #\return (string-ref html (- pos 1)))
+                                    (eqv? #\return (string-ref raw-html (- pos 1)))
                                     (- pos 1))
                                pos))])
             (if pos
