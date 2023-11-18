@@ -491,7 +491,7 @@
      [(use-katex?)
       (fprintf op "<b>Placeholder for KaTeX output from \"~a\".</b>" outfn)]
      [else
-      (fprintf op "<img src=\"~a\" alt=\"<graphic>\" />" outfn)])))
+      (fprintf op "<img src=\"~a\" alt=\"<graphic>\">" outfn)])))
 
 (define math-file-name
   (let ([seq -1])
