@@ -19,7 +19,7 @@
 \def\copyrightnotice{\copyright~1998--2016 R. Kent Dybvig and Oscar Waddell}
 
 \ifhtml
-\tableofcontents % FIXME wrongly includes id
+\tableofcontents
 \fi
 
 \iflatex
