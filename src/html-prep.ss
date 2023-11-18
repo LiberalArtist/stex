@@ -1084,7 +1084,7 @@
 
 (define emit-td
   (P lambda (k)
-    (fprintf (car ops) "<TD nowrap~a>~a</TD>"
+    (fprintf (car ops) "<td style=\"white-space:nowrap;~a\">~a</td>"
       (vector-ref (table-col-format colfmt) column)
       (get-output-string op))
     (case (car pending)
