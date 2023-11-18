@@ -1004,16 +1004,14 @@
        (P s0)]
       [(#\-)
        (if convert-quotes
-           ; emit - for -- and --- for ---.  IE4 and older versions of netscape
-           ; can't handle the proper HTML en-dash and em-dash encodings.
            (if (eqv? (peek-char ip) #\-)
                (begin
                  (read-char ip)
                  (if (eqv? (peek-char ip) #\-)
                      (begin
                        (read-char ip)
-                       (display "---" op)) ; should be &#8212;
-                     (display "-" op))) ; should be &#8211;
+                       (display "&mdash;" op))
+                     (display "&ndash;" op)))
                (write-char c op))
            (write-char c op))
        (P s0)]
@@ -1083,7 +1081,7 @@
 
 (define emit-td
   (P lambda (k)
-    (fprintf (car ops) "<TD nowrap~a>~a</TD>"
+    (fprintf (car ops) "<td style=\"white-space:nowrap;~a\">~a</td>"
       (vector-ref (table-col-format colfmt) column)
       (get-output-string op))
     (case (car pending)
