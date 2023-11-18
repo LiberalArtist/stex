@@ -659,8 +659,8 @@ create output that can work without CSS and fonts by relying solely on the
 native support for MathML in recent browsers and operating systems.) By
 default, stex will attempt to find these files relative to the ``katex''
 command, and it should be able to handle the installation layouts used by both
-Node.js and Debian. If they cannot be found automatically, you will need to
-define \scheme{KATEX_CSS}, either at the command line or in your makefile
+Node.js and Debian. If the files cannot be found automatically, you will need
+to define \scheme{KATEX_CSS}, either at the command line or in your makefile
 (before including Mf-stex): likely values include
 ``./node\_modules/katex/dist/katex.css'' and
 ``/usr/share/javascript/katex/katex.css''.
