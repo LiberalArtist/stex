@@ -63,7 +63,8 @@ class assignments, and various other documents.
 A prerequisite to building and using stex is to have Chez Scheme
 installed on your system.
 You'll also need pdflatex, dvips, ghostscript, and netpbm.
-You may also want to have \KaTeX\ installed: see ``Math in HTML'' below.
+Additionally, you may want to have \KaTeX\ installed: see ``Math in HTML''
+below.
 We've run stex under Linux and OS X but have not tried to run it under
 Windows.
 
