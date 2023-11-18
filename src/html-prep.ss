@@ -1003,14 +1003,16 @@
        (P s0)]
       [(#\-)
        (if convert-quotes
+           ; emit - for -- and --- for ---.  IE4 and older versions of netscape
+           ; can't handle the proper HTML en-dash and em-dash encodings.
            (if (eqv? (peek-char ip) #\-)
                (begin
                  (read-char ip)
                  (if (eqv? (peek-char ip) #\-)
                      (begin
                        (read-char ip)
-                       (display "&mdash;" op))
-                     (display "&ndash;" op)))
+                       (display "---" op)) ; should be &#8212;
+                     (display "-" op))) ; should be &#8211;
                (write-char c op))
            (write-char c op))
        (P s0)]
