@@ -519,7 +519,7 @@
        (when (current-ref-label)
          (haux-put-label label 'ref (car (current-ref-label)))
          (haux-put-label label 'ref-url (cdr (current-ref-label)))))
-     (format "<span id=\"~a\">~a</span>" tag text)])) ;; FIXME bad nesting
+     (format "<a name=\"~a\">~a</a>" tag text)]))
 
 (define sindex
   ; 1. read contents of \index{} form
@@ -1069,9 +1069,9 @@
   (set! silenced? #t)
   (warningf 'tabular "support for rules in HTML tables is imprecise"))
            (loop ls #t)]
-          [(#\c) (loop (cons " text-align:center;" ls) border?)]
-          [(#\l) (loop (cons " text-align:left;" ls) border?)]
-          [(#\r) (loop (cons " text-align:right;" ls) border?)]
+          [(#\c) (loop (cons " align=\"center\"" ls) border?)]
+          [(#\l) (loop (cons " align=\"left\"" ls) border?)]
+          [(#\r) (loop (cons " align=\"right\"" ls) border?)]
           [(#\@)
 (warningf 'tabular "ignoring @{~a} for now" (read-bracketed-text ip))
            (loop ls border?)]
@@ -1111,10 +1111,10 @@
       [(tabular multicolumn)
        (P emit-td ()
          (P lambda ()
-           (display "</tr><tr>" (car ops))
+           (display "</TR><TR>" (car ops))
            (P s0 ([column 0]))))]
       [else
-       (display "<br />\n" op)
+       (display "<br>\n" op)
        (P s0)])))
 
 ;-----------------------------------------------------------------------
@@ -1441,7 +1441,7 @@
           (let ([tag (gensym)])
             (current-ref-label
               (cons s (format "~a#~a" (current-ofile-name) tag)))
-            (fprintf op "<span id=\"~a\"></a>" tag))
+            (fprintf op "<a name=\"~a\"></a>" tag))
           (P s0))))))
 
 (global-def pagebreak
@@ -1588,12 +1588,12 @@
 
 (global-def tt
   (P lambda ()
-    (fprintf op "<span style=\"font-family: monospace;\">")
+    (fprintf op "<tt>")
     (P s0
       ([convert-quotes #f]
        [undos (push-undo
                 (P lambda (next)
-                  (fprintf op "</span>")
+                  (fprintf op "</tt>")
                   (P next ([convert-quotes #t])))
                 undos)]))))
 
@@ -1725,7 +1725,7 @@
       (do ([keys keys (cdr keys)] [sep "" ","])
           ((null? keys) (write-char #\] op))
           (let ([key (string->symbol (car keys))])
-            (fprintf op "~a<a class=\"citation\" href=\"~a\">~a</a>"
+            (fprintf op "~a<a class=citation href=\"~a\">~a</a>"
               sep (get-label key 'pageref-url) (get-cite key)))))
     (P s0)))
 
