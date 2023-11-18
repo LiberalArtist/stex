@@ -204,7 +204,7 @@
         (fprintf op "~a~%" (katex-css-link)))
       (when (header-stuff) (display (header-stuff) op))
       (when (style-sheet)
-        (fprintf op "<link href=\"~a\" rel=\"stylesheet\" type=\"text/css\" />\n"
+        (fprintf op "<link href=\"~a\" rel=\"stylesheet\" type=\"text/css\">\n"
           (style-sheet)))
       (fprintf op "</head>~%<body>~%")
       op)))
