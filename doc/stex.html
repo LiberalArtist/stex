@@ -172,7 +172,7 @@ and run make:
 
 <p>
 
-<p><tt>make&nbsp;Scheme=<i>schemepath</i></tt>
+<p class="schemedisplay"><tt>make&nbsp;Scheme=<i>schemepath</i></tt>
 <p>where <tt><i>schemepath</i></tt> is the path to the scheme executable.
 
 <p>
@@ -184,7 +184,7 @@ You can also use "make install" to make stex available for other users:
 
 <p>
 
-<p><tt>sudo&nbsp;make&nbsp;install&nbsp;Scheme=<i>schemepath</i>&nbsp;LIB=<i>libdir</i></tt>
+<p class="schemedisplay"><tt>sudo&nbsp;make&nbsp;install&nbsp;Scheme=<i>schemepath</i>&nbsp;LIB=<i>libdir</i></tt>
 <p>where <tt><i>schemepath</i></tt> is as described above, and <tt><i>libdir</i></tt> is the
 directory where the stex library directory should be installed.
 If <tt><i>libdir</i></tt> is writable by the current user, then <tt>sudo</tt>
@@ -195,7 +195,7 @@ As a convenience, you may more succinctly run:
 
 <p>
 
-<p><tt>sudo&nbsp;make&nbsp;install&nbsp;PREFIX=<i>prefixdir</i></tt>
+<p class="schemedisplay"><tt>sudo&nbsp;make&nbsp;install&nbsp;PREFIX=<i>prefixdir</i></tt>
 <p>where <tt><i>prefixdir</i></tt> specifies in one shot the tree under which
 the Scheme executable is installed and
 under which the stex library should be installed.
@@ -203,7 +203,7 @@ This concise invocation is equivalent to:
 
 <p>
 
-<p><tt>sudo&nbsp;make&nbsp;install&nbsp;Scheme=<i>prefixdir</i>/bin/scheme&nbsp;LIB=<i>prefixdir</i>/lib/stex<i>version</i></tt>
+<p class="schemedisplay"><tt>sudo&nbsp;make&nbsp;install&nbsp;Scheme=<i>prefixdir</i>/bin/scheme&nbsp;LIB=<i>prefixdir</i>/lib/stex<i>version</i></tt>
 <p>where <tt><i>version</i></tt> is the stex version number.
 
 <p>
@@ -326,7 +326,7 @@ produces:
 <p>
 <blockquote>
 
-<p><tt>(define&nbsp;fact<br>
+<p class="schemedisplay"><tt>(define&nbsp;fact<br>
 
 &nbsp;&nbsp;(lambda&nbsp;(x)<br>
 
@@ -378,14 +378,14 @@ produces
 A <tt>let</tt> expression expands into a call to a <tt>lambda</tt>
 expression, e.g.:
 
-<p><tt>(let&nbsp;([a&nbsp;17])&nbsp;<!-- Beginning of KaTeX output from "math/stex/3.html" --><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span><!-- End of KaTeX output from "math/stex/3.html" -->&nbsp;((lambda&nbsp;(a)&nbsp;(+&nbsp;a&nbsp;a))<br>
+<p class="schemedisplay"><tt>(let&nbsp;([a&nbsp;17])&nbsp;<!-- Beginning of KaTeX output from "math/stex/3.html" --><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span><!-- End of KaTeX output from "math/stex/3.html" -->&nbsp;((lambda&nbsp;(a)&nbsp;(+&nbsp;a&nbsp;a))<br>
 
 &nbsp;&nbsp;(+&nbsp;a&nbsp;a))&nbsp;&nbsp;&nbsp;&nbsp;<span style="visibility: hidden"><!-- Beginning of KaTeX output from "math/stex/2.html" --><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⇒</mo></mrow><annotation encoding="application/x-tex">\Rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">⇒</span></span></span></span><!-- End of KaTeX output from "math/stex/2.html" --></span>&nbsp;&nbsp;17)</tt>
 <p>A <tt>let</tt> expression first evaluates the right-hand-side
 expression, then evaluates the body in an environment that binds
 the left-hand-side variable to the resulting value, e.g.:
 
-<p><tt>(let&nbsp;([a&nbsp;17])&nbsp;<!-- Beginning of KaTeX output from "math/stex/2.html" --><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⇒</mo></mrow><annotation encoding="application/x-tex">\Rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">⇒</span></span></span></span><!-- End of KaTeX output from "math/stex/2.html" -->&nbsp;17<br>
+<p class="schemedisplay"><tt>(let&nbsp;([a&nbsp;17])&nbsp;<!-- Beginning of KaTeX output from "math/stex/2.html" --><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⇒</mo></mrow><annotation encoding="application/x-tex">\Rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">⇒</span></span></span></span><!-- End of KaTeX output from "math/stex/2.html" -->&nbsp;17<br>
 
 &nbsp;&nbsp;(+&nbsp;a&nbsp;a))</tt>
 <p></blockquote>
@@ -467,7 +467,7 @@ produces:
 <p>
 <blockquote>
 
-<p><tt>(sqrt&nbsp;<i>x</i>)&nbsp;<!-- Beginning of KaTeX output from "math/stex/2.html" --><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⇒</mo></mrow><annotation encoding="application/x-tex">\Rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">⇒</span></span></span></span><!-- End of KaTeX output from "math/stex/2.html" -->&nbsp;<!-- Beginning of KaTeX output from "math/stex/4.html" --><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mi>x</mi></msqrt></mrow><annotation encoding="application/x-tex">\sqrt{x}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.2397em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8003em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord mathnormal">x</span></span></span><span style="top:-2.7603em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+<p class="schemedisplay"><tt>(sqrt&nbsp;<i>x</i>)&nbsp;<!-- Beginning of KaTeX output from "math/stex/2.html" --><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⇒</mo></mrow><annotation encoding="application/x-tex">\Rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">⇒</span></span></span></span><!-- End of KaTeX output from "math/stex/2.html" -->&nbsp;<!-- Beginning of KaTeX output from "math/stex/4.html" --><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mi>x</mi></msqrt></mrow><annotation encoding="application/x-tex">\sqrt{x}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.2397em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8003em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord mathnormal">x</span></span></span><span style="top:-2.7603em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
 c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
 c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
 c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
@@ -613,7 +613,7 @@ produces:
 <p>
 <blockquote>
 
-<p><tt>&gt;&nbsp;(define&nbsp;f<br>
+<p class="schemedisplay"><tt>&gt;&nbsp;(define&nbsp;f<br>
 
 &nbsp;&nbsp;&nbsp;&nbsp;(lambda&nbsp;(x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;indentation&nbsp;and&nbsp;comments&nbsp;are<br>
 
@@ -715,7 +715,7 @@ produces:
 <p>
 <blockquote>
 
-<p><tt>&gt;&nbsp;#e4.5<br>
+<p class="schemedisplay"><tt>&gt;&nbsp;#e4.5<br>
 
 9/2<br>
 
@@ -825,7 +825,7 @@ output.
 <p>
 <blockquote>
 
-<p><tt>&gt;&nbsp;(begin&nbsp;(display&nbsp;"&gt;&nbsp;\n")&nbsp;(exit))<br>
+<p class="schemedisplay"><tt>&gt;&nbsp;(begin&nbsp;(display&nbsp;"&gt;&nbsp;\n")&nbsp;(exit))<br>
 
 <font color="#0000ff">&gt;&nbsp;<br>
 
@@ -856,7 +856,7 @@ produces no trailing "antelope? " prompt:
 <p>
 <blockquote>
 
-<p><tt>&gt;&nbsp;(waiter-prompt-string&nbsp;"antelope?&nbsp;")<br>
+<p class="schemedisplay"><tt>&gt;&nbsp;(waiter-prompt-string&nbsp;"antelope?&nbsp;")<br>
 
 antelope?&nbsp;&nbsp;"no&nbsp;thanks"<br>
 
@@ -922,7 +922,7 @@ produces the output shown below.
 <p>
 <i>The <tt>compute-length</tt> procedure behaves as follows:</i>
 
-<p><tt>&gt;&nbsp;(compute-length&nbsp;'())<br>
+<p class="schemedisplay"><tt>&gt;&nbsp;(compute-length&nbsp;'())<br>
 
 0<br>
 

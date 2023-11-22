@@ -18,7 +18,8 @@
 \def\scheme#1{{\tt #1}}
 \def\longcode\schemedisplay{\schemedisplay}
 \def\noskip\schemedisplay{\schemedisplay}
-\def\schemedisplay{\par\begingroup\tt\hardspaces}
+\def\schemedisplay{\begingroup\renewcommand{\par}{\raw{
+<p class="schemedisplay">}}\par\endgroup\begingroup\tt\hardspaces}
 \def\endschemedisplay{\endgroup\par}
 \def\schemeindent{}
 \def\schatsign{\raw{@}}
