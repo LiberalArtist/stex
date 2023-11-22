@@ -289,6 +289,11 @@
   (lambda (ip op) ; within \begin{eqnarray*} ... \end{eqnarray*}
     (when (use-katex?)
       (input-error "environment eqnarray* not supported by KaTeX"))
+    ;; Might be viable to translate to \begin{align*} ... \end{align*} syntax,
+    ;; which KaTeX does support, or to add support for align* and encourage
+    ;; users to port there documents. See discussion in:
+    ;; https://www.tug.org/pracjourn/2006-4/madsen/madsen.pdf
+    ;; (especially sections 2.3 and 3)
     (let ([s (let ([buf (open-output-string)])
                (let loop ()
                  (state-case (c (read-char ip))
